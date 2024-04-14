@@ -1,5 +1,5 @@
 class Impresa:
-    def init(self, codiceFiscale, Denominazione, ragioneSociale, divisioneAteco, numeroDipendenti, numeroSoci, numeroAmministratori, dataCostituzione, certificazioniQualita, Fatturato):
+    def __init__(self, codiceFiscale, Denominazione, ragioneSociale, divisioneAteco, numeroDipendenti, numeroSoci, numeroAmministratori, dataCostituzione, certificazioneQualita, Fatturato):
         self.codiceFiscale = codiceFiscale #il codice fiscale dell’azienda
         self.Denominazione = Denominazione # nome dell'azienda
         self.ragioneSociale = ragioneSociale # tipo di società
@@ -8,7 +8,7 @@ class Impresa:
         self.numeroSoci = numeroSoci
         self.numeroAmministratori = numeroAmministratori
         self.dataCostituzione = dataCostituzione
-        self.certificazioniQualita = certificazioniQualita #vale True se l’impresa ha certificazioni di qualità; False altrimenti.
+        self.certificazioneQualita = certificazioneQualita #vale True se l’impresa ha certificazioni di qualità; False altrimenti.
         self.Fatturato = Fatturato #annuo
 
 def calcolaIrap(self):
@@ -49,7 +49,7 @@ def dirittoAgevolazione(self):
 #######################################################################################################################################################################
 
 class Comune:
-    def init(self, nomeComune, provincia, abitanti):
+    def __init__(self, nomeComune, provincia, abitanti):
         self.nome = nomeComune
         self.provincia = provincia
         self.abitanti = abitanti
@@ -71,7 +71,7 @@ class Comune:
 
 class ModelloF24:
     #costruttore classe Modello
-    def init(self, impresa, dataModello):
+    def __init__(self, impresa, dataModello):
         self.impresa = impresa 
         self.dataModello = dataModello
         self.importoIrap = impresa.calcolaIrap() 
