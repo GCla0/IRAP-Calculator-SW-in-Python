@@ -1,0 +1,10 @@
+Milano,Lombardia,1352000000
+Cosenza,Calabria,67563
+Torino,Piemonte,886837
+Palermo,Sicilia,673735
+Pavia,Lombardia,72612
+Bologna,Emilia-Romagna,388367
+Bergamo,Lombardia,120287
+Tropea,Calabria,6362
+Roma,Lazio,2873000000
+Alberobello,Puglia,10735

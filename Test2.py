@@ -1,6 +1,9 @@
 
 # PROGRAMMA DI TEST 2
 
+import pandas as pd
+import Test1
+
 # A partire dalla lista delle imprese ottenuta leggendo il file “imprese_ordinate.txt” generato in precedenza
 # ed utilizzando opportune funzioni ausiliarie, calcoli:
 
@@ -10,7 +13,8 @@
 # Resitutisce un array con il nome e il codice fiscale di ciascuna impresa, associati a tale media.
 
 def calcoloMediaAritmetica (arrayImprese):
-    arrayMedie = [] #dichiaro array vuoto che avrà questo aspetto: {Microsoft, 37, HP, 29, Accenture, 94, etc.}
+    arrayMedie = [] # dichiarazione di un array vuoto che una volta riempito avrà questo aspetto: {Callipo, 37, Enel, 29, Fiat, 94, etc.}
+    
     for impresa in arrayImprese:
         
         # Calcolo della media aritmetica
@@ -23,7 +27,7 @@ def calcoloMediaAritmetica (arrayImprese):
             "Media Dipendenti e Soci": mediaAritmetica
             }
 
-        # Aggiungi il dizionario all'array
+        # Aggiunta del dizionario all'array
         arrayMedie.append(mediaAritmeticaDict)
     return arrayMedie
 
@@ -63,8 +67,6 @@ def percentualeImprese (arrayImprese):
 
 # Le aziende con certificazioni di qualità (“Certificazioni di qualità” == True) e “Ragione Sociale” = Società di Capitale (con pandas);
 
-import pandas as pd 
-
 def QualitaCapitale (arrayImprese):
     newDataFrame = pd.DataFrame([(impresa.Denominazione, impresa.certificazioneQualita, impresa.ragioneSociale) for impresa in arrayImprese],
         columns=["Nome impresa","Certificazioni di qualità impresa", "Ragione Sociale impresa"])
@@ -90,23 +92,23 @@ def numeroATECO (arrayImprese):
         count[ateco] +=1
     return count
 
-# main
-
-import Test1
+#######################################################################################################################################################################
+# MAIN 
+#######################################################################################################################################################################
 
 def main ():
     # lettura file .txt con l'array di imprese
-    arrayImprese = Test1.leggiImprese()
+    arrayImprese = Test1.leggiImprese("imprese_ordinate.txt")
     
-    print(f"Media aritmetica 1\n{calcoloMediaAritmetica(arrayImprese)}")
-
-    print(f"Media aritmetica 2\n{calcoloMediaAritmetica2(arrayImprese)}")
-
-    print(f"percentualeImprese con quelle due condizioni\n{percentualeImprese(arrayImprese)}")
-
-    print(f"aziende di società di capitale con certificazioni di qualità\n{QualitaCapitale(arrayImprese)}")
+    print(f"Media aritmetica tra Numero di Soci e Numero di Dipendenti per ciascuna impresa:\n{calcoloMediaAritmetica(arrayImprese)}\n")
     
-    print(f"imprese per divisione ATECO\n{numeroATECO(arrayImprese)}")
+    print(f"Medie di Dipendenti e Soci tra tutte le imprese:\n{calcoloMediaAritmetica2(arrayImprese)}\n")
+
+    print(f"Percentuale di imprese in possesso di Certificazioni di Qualità con fatturato annuale tra 10.000 e 50.000 €:\n{percentualeImprese(arrayImprese)}%\n")
+
+    print(f"Aziende del tipo 'Società di Capitale' in possesso di Certificazioni di Qualità:\n{QualitaCapitale(arrayImprese)}\n")
+    
+    print(f"Numero di imprese per divisione ATECO:\n{numeroATECO(arrayImprese)}\n")
 
 if __name__ == "__main__":
     main()

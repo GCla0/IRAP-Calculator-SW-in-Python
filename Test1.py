@@ -1,33 +1,36 @@
 
 # PROGRAMMA DI TEST 1
 
+from Classes import Impresa # importazione classe impresa
+from datetime import datetime # formato data 
+
 # Legga dal file di testo “imprese.txt” (da creare opportunamente con un editor di testo e contenente
 # almeno i dati di 8 imprese) l’insieme delle imprese e li memorizzi, come oggetti di tipo “Impresa”,
 # all’interno di una lista;
 
-from Classes import Impresa # importazione classe impresa
-from datetime import datetime # formato data 
+def leggiImprese(txt):
+    arrayImprese = [] #dichiarazione di un array vuoto che ospiterà gli oggetti di tipo impresa
 
-def leggiImprese():
-    arrayImprese = [] #dichiaro array vuoto che ospiterà gli oggetti di tipo impresa
-    try: # verifica della presenza del file
-        with open("imprese.txt", "r") as file: 
+    # verifica della presenza del txt nella directory
+    try: 
+        with open(txt, "r") as file: 
             for riga in file:
                 dati = riga.split(",")
                 impresa = Impresa(
-                    dati[0], # codice fiscale
-                    dati[1], # denominazione
-                    dati[2], # ragione sociale
-                    dati[3], # divisione ATECO
-                    int(dati[4]), # numero di dipendenti
-                    int(dati[5]), # numero di soci
-                    int(dati[6]), # numero di amministratori
-                    datetime.strptime(dati[7],"%d-%m-%Y"), # data di costituzione (in formato datatime)
-                    bool(dati[8].lower()=="true"), # certificazione di qualità (booleano)
-                    int(dati[9]) # fatturato annuale
+                    dati[0],                                # codice fiscale
+                    dati[1],                                # denominazione
+                    dati[2],                                # ragione sociale
+                    dati[3],                                # divisione ATECO
+                    int(dati[4]),                           # numero di dipendenti
+                    int(dati[5]),                           # numero di soci
+                    int(dati[6]),                           # numero di amministratori
+                    datetime.strptime(dati[7],"%d-%m-%Y"),  # data di costituzione (in formato datatime)
+                    bool(dati[8].lower()=="true"),          # certificazione di qualità (si o no == true or false)
+                    int(dati[9])                            # fatturato annuale
                 )
-                arrayImprese.append(impresa) #Aggiungo l'oggetto Impresa all'array lista_imprese
-    except FileNotFoundError as E: # se file assente
+                if impresa not in arrayImprese: 
+                    arrayImprese.append(impresa) # esclusivamente se l'impresa non è stata ancora aggiunta all'array, viene inserita
+    except FileNotFoundError as E: # caso in cui il txt non fosse nella directory
         print(E)
     return arrayImprese
 
@@ -45,7 +48,7 @@ def creaDizionarioPersoneCoinvolte(arrayImprese):
       # Se il codice fiscale esiste, aggiorna il totale
       DizionarioPersoneCoinvolte[impresa.codiceFiscale] += TotalePersoneCoinvolte
     else:
-      # Se il codice fiscale non esiste, lo aggiunge al dizionario
+      # Se il codice fiscale NON esiste, viene aggiunto al dizionario
       DizionarioPersoneCoinvolte[impresa.codiceFiscale] = TotalePersoneCoinvolte
 
   return DizionarioPersoneCoinvolte
@@ -58,11 +61,13 @@ def ordinaImprese(arrayImprese):
     return arrayImprese
 
 # Visualizzi i dati di tutte le imprese presenti nella lista;
+
 def visualizzaImprese(arrayImprese):
    for impresa in arrayImprese:
       print(f"Codice fiscale: {impresa.codiceFiscale}; Denominazione: {impresa.Denominazione}; Ragione sociale: {impresa.ragioneSociale}; Divisione ATECO: {impresa.divisioneAteco}; Numero dipendenti: {impresa.numeroDipendenti}; Numero soci: {impresa.numeroSoci}; Numero amministratori: {impresa.numeroAmministratori}; Data di costituzione: {impresa.dataCostituzione.strftime("%d-%m-%Y")}; Certificazione di qualità: {impresa.certificazioneQualita}; Fatturato: {impresa.Fatturato}\n")
 
 # Salvi sul file “imprese_ordinate.txt” il contenuto finale della lista
+
 def scriviImprese(arrayImprese):
     with open ("imprese_ordinate.txt", "w") as file:
         for impresa in arrayImprese:
@@ -74,15 +79,15 @@ def scriviImprese(arrayImprese):
 
 def main ():
     # lettura file .txt con l'array di imprese
-    arrayImprese = leggiImprese()
-    
+    arrayImprese = leggiImprese("imprese.txt")
+
     # creazione e visualizzazione del dizionario
     dizionario = creaDizionarioPersoneCoinvolte(arrayImprese)
-    print(dizionario)
-    print("\n")
-
-    #ordinamento e visualizzazione di un nuovo array di imprese in ordine di divisione ATECO
+    print(f"Dizionario:\n{dizionario}\n")
+    
+    # ordinamento e visualizzazione di un nuovo array di imprese in ordine di divisione ATECO
     arrayImpreseOrdinate = ordinaImprese(arrayImprese)
+    print("Lista delle imprese a sistema ordinate per divisione ATECO:\n")
     visualizzaImprese(arrayImpreseOrdinate)
     
     # salvataggio nuovo array su file .txt

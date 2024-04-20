@@ -1,8 +1,10 @@
-00865960157,Conad,Societa Cooperativa,C10,259,21,25,13-05-1962,True,23
-07211330159,Pirelli Tyre,Societa per Azioni,C22,1271,4,15,28-01-1872,True,4366
-00159560366,Ferrari,Societa per Azioni,C29,4631,3,11,12-03-2024,True,14832
-04346220967,Will,Società Responsabilita Limitata,J58,10,2,1,13-05-1962,False,600
-09489670969,Nexi,Societa per Azioni,K64,102,8,13,10-11-2017,True,3260
-11931440017,Young Platform,Societa per Azioni,K64,60,6,8,13-05-1962,True,1605
-06131300722,Directa,Società Responsabilita Limitata,K64,12,3,2,13-05-1962,True,2296
-03592990794,Entopan Innovation,Societa Responsabilità Limitata,M70,50,13,11,13-05-1962,False,1321
+00210319656,Fiat,Societa per Azioni,A10,431,2,2,12-03-2024,False,12741
+00160219632,Intesa Sanpaolo,Societa Cooperativa,C10,15,2,24,13-05-1962,True,50
+03345530723,Tim,Societa di Capitale,C22,219,4,20,13-05-1962,True,1598
+18180619961,Enel,Impresa Individuale,C25,1271,10,4,28-01-1872,True,3999
+08954150960,HP,Societa a Responsabilita Limitata,J21,95,3,9,20-10-1999,True,12345
+01220515611,Callipo,Societa di Capitale,J21,100,3,2,13-05-1962,True,50000
+11131300726,Lavazza,Societa Responsabilita Limitata,K42,120,3,50,13-05-1962,True,10321
+09171120017,Pandora,Societa di Persone,K42,12,5,29,10-11-2017,False,3476
+03449980287,Rummo,Societa di Persone,K42,35,10,5,28-02-1846,True,19680
+23177016999,Gucci,Societa Responsabilita Limitata,M70,56,5,21,13-05-1962,False,4000
