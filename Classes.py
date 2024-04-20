@@ -1,7 +1,11 @@
-# Classes.py
-# Classe Impresa, Comune e ModelloF24 con associati metodi.
+
+# CLASSES 
 
 from datetime import datetime
+
+#######################################################################################################################################################################
+# Class Impresa 
+#######################################################################################################################################################################
 
 class Impresa:
     def __init__(self, codiceFiscale, Denominazione, ragioneSociale, divisioneAteco, numeroDipendenti, numeroSoci, numeroAmministratori, dataCostituzione, certificazioneQualita, Fatturato):
@@ -55,6 +59,8 @@ def dirittoAgevolazione(self):
             return False
         
 #######################################################################################################################################################################
+# Class Comune 
+#######################################################################################################################################################################
 
 class Comune:
     def __init__(self, nomeComune, regione, abitanti):
@@ -74,13 +80,15 @@ class Comune:
     def emettiModelloF24(self, impresa, data):
         # per prima cosa si controlla che la stessa impresa non abbia già emesso un modello nella stessa data presso questo comune
         for mod in self.modelliF24Emessi:
-            if data == mod.dataModello:
+            if data == mod.dataModello and impresa.Denominazione == mod.impresa.Denominazione:
                 print(f"Un Modello F24 è già stato emesso da quest'impresa in questa data.")
                 return
         modelloF24 = ModelloF24(impresa, data)              # Creazione di un nuovo oggetto di tipo ModelloF24 con relativa impresa
         self.modelliF24Emessi.append(modelloF24)            # Aggiunta di tale Modello F24 alla lista dei modelli emessi dal 
         print(f"Modello F24 per l'impresa '{impresa.Denominazione}' emesso presso il comune di {self.nome}.")
 
+#######################################################################################################################################################################
+# Class ModelloF24 
 #######################################################################################################################################################################
 
 class ModelloF24:

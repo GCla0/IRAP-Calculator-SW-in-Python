@@ -5,11 +5,32 @@ import pandas as pd
 import Test1
 
 # A partire dalla lista delle imprese ottenuta leggendo il file “imprese_ordinate.txt” generato in precedenza
-# ed utilizzando opportune funzioni ausiliarie, calcoli:
+# ed utilizzando opportune funzioni ausiliarie, vengono implementati i metodi a seguire.
 
-# La media aritmetica del “Numero di dipendenti” e del “Numero di soci” delle imprese;
+#######################################################################################################################################################################
+# MAIN 
+#######################################################################################################################################################################
 
-# "calcoloMediaAritmetica" calcola, per ciascuna impresa, la media tra il suo numero di soci e il suo numero di dipendenti.
+def main ():
+    # lettura file .txt con l'array di imprese
+    arrayImprese = Test1.leggiImprese("imprese_ordinate.txt")
+    
+    print(f"Media aritmetica tra Numero di Soci e Numero di Dipendenti per ciascuna impresa:\n{calcoloMediaAritmetica(arrayImprese)}\n")
+    
+    print(f"Medie di Dipendenti e Soci tra tutte le imprese:\n{calcoloMediaAritmetica2(arrayImprese)}\n")
+
+    print(f"Percentuale di imprese in possesso di Certificazioni di Qualità con fatturato annuale tra 10.000 e 50.000 €:\n{percentualeImprese(arrayImprese)}%\n")
+
+    print(f"Aziende del tipo 'Società di Capitale' in possesso di Certificazioni di Qualità:\n{QualitaCapitale(arrayImprese)}\n")
+    
+    print(f"Numero di imprese per divisione ATECO:\n{numeroATECO(arrayImprese)}\n")
+
+
+#######################################################################################################################################################################
+# FUNCTIONS 
+#######################################################################################################################################################################
+
+# calcoloMediaAritmetica(arrayImprese) calcola, per ciascuna impresa, la media tra il suo numero di soci e il suo numero di dipendenti.
 # Resitutisce un array con il nome e il codice fiscale di ciascuna impresa, associati a tale media.
 
 def calcoloMediaAritmetica (arrayImprese):
@@ -31,7 +52,9 @@ def calcoloMediaAritmetica (arrayImprese):
         arrayMedie.append(mediaAritmeticaDict)
     return arrayMedie
 
-# "calcoloMediaAritmetica2" calcola DUE medie aritmetiche:
+#######################################################################################################################################################################
+
+# "calcoloMediaAritmetica2(arrayImprese)" calcola DUE medie aritmetiche:
 # 1) la media del numero di dipendenti tra tutte le imprese nel txt
 # 2) la media del numero di soci tra tutte le imprese nel txt
 # Resitutisce i due valori.
@@ -51,7 +74,9 @@ def calcoloMediaAritmetica2 (arrayImprese):
         "Media dei soci:": totSoci/count
         }        
 
-# La percentuale di imprese con “Certificazioni di qualità” o “Fatturato” compreso tra 10000 e 50000 Euro (estremi compresi);
+#######################################################################################################################################################################
+
+# percentualeImprese (arrayImprese) calcola la percentuale di imprese con “Certificazioni di qualità” o “Fatturato” compreso tra 10000 e 50000 Euro (estremi compresi)
 
 def percentualeImprese (arrayImprese):
     count = 0
@@ -65,7 +90,10 @@ def percentualeImprese (arrayImprese):
         return 0
     return (count/totImprese) * 100
 
-# Le aziende con certificazioni di qualità (“Certificazioni di qualità” == True) e “Ragione Sociale” = Società di Capitale (con pandas);
+#######################################################################################################################################################################
+
+# QualitaCapitale (arrayImprese) stampa un elenco dei nomi delle aziende con certificazioni di qualità (“Certificazioni di qualità” == True) e “Ragione Sociale” = Società di Capitale
+# il metodo utilizza pandas.
 
 def QualitaCapitale (arrayImprese):
     newDataFrame = pd.DataFrame([(impresa.Denominazione, impresa.certificazioneQualita, impresa.ragioneSociale) for impresa in arrayImprese],
@@ -80,8 +108,9 @@ def QualitaCapitale (arrayImprese):
     arrayNomiImprese = ", ".join(nomiImprese)
     return arrayNomiImprese
 
+#######################################################################################################################################################################
 
-# Per ogni “Divisione ATECO” il numero di aziende.
+# numeroATECO (arrayImprese) conta il numero di aziende appartenenti a ciascuna divisione ATECO
 
 def numeroATECO (arrayImprese):
     count = {}  # Dizionario per conteggi ATECO
@@ -93,22 +122,6 @@ def numeroATECO (arrayImprese):
     return count
 
 #######################################################################################################################################################################
-# MAIN 
-#######################################################################################################################################################################
-
-def main ():
-    # lettura file .txt con l'array di imprese
-    arrayImprese = Test1.leggiImprese("imprese_ordinate.txt")
-    
-    print(f"Media aritmetica tra Numero di Soci e Numero di Dipendenti per ciascuna impresa:\n{calcoloMediaAritmetica(arrayImprese)}\n")
-    
-    print(f"Medie di Dipendenti e Soci tra tutte le imprese:\n{calcoloMediaAritmetica2(arrayImprese)}\n")
-
-    print(f"Percentuale di imprese in possesso di Certificazioni di Qualità con fatturato annuale tra 10.000 e 50.000 €:\n{percentualeImprese(arrayImprese)}%\n")
-
-    print(f"Aziende del tipo 'Società di Capitale' in possesso di Certificazioni di Qualità:\n{QualitaCapitale(arrayImprese)}\n")
-    
-    print(f"Numero di imprese per divisione ATECO:\n{numeroATECO(arrayImprese)}\n")
 
 if __name__ == "__main__":
     main()

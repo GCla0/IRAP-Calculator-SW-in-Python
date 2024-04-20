@@ -2,12 +2,66 @@
 # PROGRAMMA DI TEST 3
 
 from datetime import date, datetime
-from time import strptime
 from Classes import Impresa, Comune, calcolaIrap
 import Test1
 
-# Implementare un terzo programma di test che:
-# Crea uno o più comuni
+#######################################################################################################################################################################
+# MAIN (con la switch per navigare tutte le opzioni offerte dal programma)
+#######################################################################################################################################################################
+
+def main ():
+    # lettura file .txt con l'array di comuni
+    arrayComuni = leggiComuni("comuni.txt")
+    # lettura file .txt con l'array di imprese
+    # arrayImprese = Test1.leggiImprese("imprese.txt") # nel caso in cui si eseguisse esclusivamente questo programma di test 3
+    arrayImprese = Test1.leggiImprese("imprese_ordinate.txt") # nel caso in cui fossero stati eseguiti Test1 e Test2 in precedenza
+    exit=False
+    while (exit == False):
+        
+        value = input("Operazioni disponibili: \n 1: Creazione Report per Comune \n 2: Calcolo quota IRAP per Impresa \n 3: Emissione e Registrazione nuovo Modello F24 \n 4: Registrazione Modello F24 precedentemente emesso \n 5: Lista Modelli F24 \n 6: Lista Comuni \n 7: Inserimento Comune \n 8: Inserimento Impresa \n 9: Registrazione Impresa-Comune \n 10: Lista Imprese registrate presso Comune \n 0: Fine operazioni \n")
+        
+        match value:
+            case "1": #Creazione Report per un comune a scelta
+                report(arrayComuni)
+
+            case "2": #Calcolo quota IRAP per un'impresa a scelta
+                IRAP(arrayImprese)
+
+            case "3": #Emissione e Registrazione nuovo Modello F24
+                emissione(arrayImprese,arrayComuni)
+
+            case "4": #Registrazione di un Modello F24 precedentemente emesso
+                antichiModelliF24(arrayImprese,arrayComuni)
+
+            case "5": #Stampa la lista di Modelli F24 emessi da un comune a scelta
+                stampaModelli(arrayComuni) 
+
+            case "6": #Stampa la lista di tutti i Comuni registrati a sistema
+                stampaComuni(arrayComuni)
+
+            case "7": #Inserimento nuovo Comune
+                arrayComuni = creaComune(arrayComuni)
+
+            case "8": #Inserimento nuova Impresa
+                arrayImprese = creaImpresa(arrayImprese)
+
+            case "9": #Registrazione di un'impresa a scelta presso un comune a scelta
+                registrazioneIC(arrayImprese, arrayComuni)
+
+            case "10": #Visualizzare la lista di imprese registrate presso un comune a scelta
+                listaRegistrazioni(arrayComuni)
+
+            case "0": #Fine operazioni
+                exit = True
+
+            case _:
+                print("Scegliere un'operazione tra le alternative proposte, o 0 per terminare.")
+    
+#######################################################################################################################################################################
+# FUNCTIONS
+#######################################################################################################################################################################
+
+# creaImpresa(arrayImprese) registra una nuova impresa a sistema
 
 def creaImpresa (arrayImprese):
     # nel main verrà dato in input l'output della funzione leggiImprese(txt) perché aggiunga le nuove alle preesistenti
@@ -32,21 +86,22 @@ def creaImpresa (arrayImprese):
     print(f"Impresa '{Denominazione}' creata a sistema.")
     return arrayImprese
 
-def creaComune (arrayComuni):
-    # nel main verrà dato in input l'output della funzione leggiComuni(txt) perché aggiunga i nuovi ai preesistenti
-    nome = input("Si digiti il nome del comune: ")
-    for comune in arrayComuni:
-        if nome == comune.nome:
-            print("Questo Comune è già stato registrato a sistema.") # si assume che non esistano comuni omonimi
-            return
-    regione = input("Si digiti la regione a cui appartiene il comune: ")
-    abitanti = int(input("Si digiti il numero di abitanti del comune: "))
-    
-    nuovoComune = Comune(nome,regione,abitanti)
-    arrayComuni.append(nuovoComune)
-    print(f"Comune di {nuovoComune.nome} creato a sistema.")
-    
-    return arrayComuni
+#######################################################################################################################################################################
+
+# IRAP(arrayImprese) calcola l'importo IRAP per un’impresa a scelta
+
+def IRAP(arrayImprese):
+    cf = input("Si digiti il Codice Fiscale dell'impresa per cui si vuole conoscere la quota IRAP: ")
+    for impresa in arrayImprese:
+        if cf == impresa.codiceFiscale:
+            print(f"Quota IRAP per l'impresa {impresa.Denominazione}: {calcolaIrap(impresa)} €.")
+            return #calcolaIrap(impresa)
+    print ("Il Codice Fiscale inserito non corrisponde a nessuna impresa registrata a sistema.")
+    return
+
+#######################################################################################################################################################################
+
+# leggiComuni(txt) legge il file txt nella directory contenente una lista di comuni
 
 def leggiComuni(txt):
     arrayComuni = [] #dichiarazione di un array vuoto che ospiterà gli oggetti di tipo Comune
@@ -66,7 +121,42 @@ def leggiComuni(txt):
         print(E)
     return arrayComuni
 
-# Effettua la registrazione di un’impresa presso il comune
+#######################################################################################################################################################################
+
+# creaComune(arrayComuni) registra un nuovo comune a sistema
+
+def creaComune (arrayComuni):
+    # nel main verrà dato in input l'output della funzione leggiComuni(txt) perché aggiunga i nuovi ai preesistenti
+    nome = input("Si digiti il nome del comune: ")
+    for comune in arrayComuni:
+        if nome == comune.nome:
+            print("Questo Comune è già stato registrato a sistema.") # si assume che non esistano comuni omonimi
+            return
+    regione = input("Si digiti la regione a cui appartiene il comune: ")
+    abitanti = int(input("Si digiti il numero di abitanti del comune: "))
+    
+    nuovoComune = Comune(nome,regione,abitanti)
+    arrayComuni.append(nuovoComune)
+    print(f"Comune di {nuovoComune.nome} creato a sistema.")
+    
+    return arrayComuni
+
+#######################################################################################################################################################################
+
+# stampaComuni(arrayComuni) stampa un elenco con i nomi dei comuni registrati a sistema
+
+def stampaComuni(arrayComuni):
+    if len(arrayComuni)==0:
+        print("Non esistono comuni registrati a sistema.")
+        return
+    print(f"Comuni registrati a sistema:")
+    for comune in arrayComuni:
+        print (comune.nome)
+    return
+
+#######################################################################################################################################################################
+
+# registrazioneIC(arrayImprese, arrayComuni) effettua la registrazione di un’impresa presso un comune
 
 def registrazioneIC(arrayImprese, arrayComuni):
     codiceFiscale = input("Si digiti il Codice Fiscale dell'impresa da registrare: ")
@@ -100,18 +190,31 @@ def registrazioneIC(arrayImprese, arrayComuni):
         print("Il comune deve essere creato a sistema.")
         return
 
-# Calcoli l’import IRAP per l’impresa
+#######################################################################################################################################################################
 
-def IRAP(arrayImprese):
-    cf = input("Si digiti il Codice Fiscale dell'impresa per cui si vuole conoscere la quota IRAP: ")
-    for impresa in arrayImprese:
-        if cf == impresa.codiceFiscale:
-            print(f"Quota IRAP per l'impresa {impresa.Denominazione}: {calcolaIrap(impresa)} €.")
-            return #calcolaIrap(impresa)
-    print ("Il Codice Fiscale inserito non corrisponde a nessuna impresa registrata a sistema.")
-    return
+# listaRegistrazioni(arrayComuni) restituisce un elenco di tutte le imprese registrate presso un comune a scelta
 
-# Emissione del modello F24 per l’impresa da parte del comune
+def listaRegistrazioni(arrayComuni):
+    aqui = input("Si digiti il nome del Comune presso cui si vogliono consultare le imprese registrate: ")
+    found=False
+    for comune in arrayComuni:
+        if aqui == comune.nome:
+            if len(comune.impreseRegistrate) ==0:
+                print(f"Presso il comune di {aqui} non risulta alcuna impresa registrata.")
+                return
+            else:
+                found=True
+                print(f"Imprese registrate presso il comune di {aqui}:")
+                for impresa in comune.impreseRegistrate:
+                    print (impresa.Denominazione)
+                return
+    if found == False:
+        print(f"Il comune di {aqui} non è registrato a sistema.")
+        return
+
+#######################################################################################################################################################################
+
+# emissione(arrayImprese, arrayComuni) emette un nuovo Modello F24 con la data odierna per un'impresa a scelta
 
 def emissione(arrayImprese, arrayComuni):
     cf = input("Si digiti il Codice Fiscale dell'impresa per cui si vuole emettere il Modello F24: ")
@@ -135,24 +238,9 @@ def emissione(arrayImprese, arrayComuni):
     print ("L'impresa selezionata non è registrata presso nessun comune.")
     return
 
-# Stampa dei modelli F24 emessi dal comune
+#######################################################################################################################################################################
 
-def stampaModelli(arrayComuni):
-    dove = input("Si digiti il nome del Comune di cui si vogliono visualizzare i Modelli F24 emessi: ")
-    for comune in arrayComuni:
-        if dove == comune.nome:
-            if len(comune.modelliF24Emessi)==0:
-                print("Non esistono Modelli F24 emessi da questo comune.")
-                return
-            print(f"Modelli F24 emessi dal comune di {dove}:")
-            for modello in comune.modelliF24Emessi:
-                print(f"\n{modello.preparaF24()}")
-            return
-    print ("Il nome inserito non corrisponde a nessun Comune registrato a sistema.")
-    return
-
-# Generazione di un report con statistiche sull’importo totale dell’IRAP riscosso dal comune in un determinato periodo di tempo.
-# Con aggiunta di un modello che consente di registrare a sistema Modelli F24 emessi nel passato.
+# antichiModelliF24(arrayImprese,arrayComuni) consente di registrare a sistema un Modello F24 emesso nel passato
 
 def antichiModelliF24(arrayImprese,arrayComuni):
     cf = input("Si digiti il Codice Fiscale dell'impresa per cui si vuole registrare un antico Modello F24: ")
@@ -173,10 +261,12 @@ def antichiModelliF24(arrayImprese,arrayComuni):
             if cf==impresa.codiceFiscale:
                 data = vecchiaData()
                 return comune.emettiModelloF24(impresa, data)
-        print("L'impresa selezionata non è registrata presso nessun comune.")
-        return
+    print("L'impresa selezionata non è registrata presso nessun comune.")
+    return
 
-# Il metodo 'vecchiaData()' verifica che la data inserita in input da tastiera sia anteriore a quella odierna
+######################################################################################################################################################################## Il metodo 'vecchiaData()' verifica che la data inserita in input da tastiera sia anteriore a quella odierna
+
+# vecchiaData() effettua un controllo che la data inserita da tastiera per un antico Modello F24 sia effettivamente nel passato
 
 def vecchiaData ():
     exit=False
@@ -193,6 +283,28 @@ def vecchiaData ():
         except ValueError:
             exit=False
     return data
+
+#######################################################################################################################################################################
+
+# stampaModelli(arrayComuni) visualizza tutti i modelli F24 emessi da un comune a scelta
+
+def stampaModelli(arrayComuni):
+    dove = input("Si digiti il nome del Comune di cui si vogliono visualizzare i Modelli F24 emessi: ")
+    for comune in arrayComuni:
+        if dove == comune.nome:
+            if len(comune.modelliF24Emessi)==0:
+                print("Non esistono Modelli F24 emessi da questo comune.")
+                return
+            print(f"Modelli F24 emessi dal comune di {dove}:")
+            for modello in comune.modelliF24Emessi:
+                print(f"\n{modello.preparaF24()}")
+            return
+    print ("Il nome inserito non corrisponde a nessun Comune registrato a sistema.")
+    return
+
+#######################################################################################################################################################################
+
+# report(arrayComuni) genera un report con statistiche sull’importo totale dell’IRAP riscosso da un comune a scelta in un determinato periodo di tempo.
 
 def report(arrayComuni):
     dove = input("Si digiti il nome del Comune di cui si vuole visualizzare un report: ")
@@ -214,7 +326,7 @@ def report(arrayComuni):
         print(f"Il comune di {dove} non è registrato a sistema.")
         return
     
-    # se il comune esiste a sistema e ci sono dei modelli emessi registrati...
+    # se il comune esiste a sistema & ci sono dei modelli emessi registrati...
     
     count = 0 # per contare quante imprese hanno emesso i ModelliF24 presso il comune dato in input
     sum = 0 # per sommare l'importo totale dell'IRAP
@@ -240,82 +352,14 @@ def report(arrayComuni):
             DizionarioCount[modello.impresa.ragioneSociale] = 1
             DizionarioRagioneSociale[modello.impresa.ragioneSociale] = (modello.impresa.Fatturato/DizionarioCount[modello.impresa.ragioneSociale])
 
-    
-    # lista delle imprese registrate presso il comune
-    print(f"Imprese registrate presso il comune di {dove}: {listaRegistrazioni}")
     # IRAP totale riscosso dal comune richiesto
-    print(f"Importo IRAP totale riscosso dal comune di {dove} nel periodo selezionato: {sum} €\n")
+    print(f"\nImporto IRAP totale riscosso dal comune di {dove} nel periodo selezionato: {sum} €\n")
     # media dell'IRAP riscosso da tutte le aziende del comune richiesto
     print(f"Media importo IRAP per impresa riscosso dal comune di {dove} nel periodo selezionato: {sum/count} €\n")
     # media IRAP riscosso da tutte le aziende del comune richiesto, suddivise per ragione sociale
     print(f"Media importo IRAP per Ragione Sociale riscosso dal comune di {dove} nel periodo selezionato:\n{DizionarioRagioneSociale}\n")  
     
-def listaRegistrazioni(arrayComuni):
-    aqui = input("Si digiti il nome del Comune presso cui si vogliono consultare le imprese registrate: ")
-    found=False
-    for comune in arrayComuni:
-        if aqui == comune.nome:
-            if len(comune.impreseRegistrate) ==0:
-                print(f"Presso il comune di {aqui} non risulta alcuna impresa registrata.")
-                return
-            else:
-                found=True
-                print(f"Imprese registrate presso il comune di {aqui}:")
-                for impresa in comune.impreseRegistrate:
-                    print (impresa.Denominazione)
-                return
-    if found == False:
-        print(f"Il comune di {aqui} non è registrato a sistema.")
-        return
-        
-#######################################################################################################################################################################
-# MAIN 
 #######################################################################################################################################################################
 
-def main ():
-    # lettura file .txt con l'array di comuni
-    arrayComuni = leggiComuni("comuni.txt")
-    # lettura file .txt con l'array di imprese
-    arrayImprese = Test1.leggiImprese("imprese_ordinate.txt")
-    exit=False
-    while (exit == False):
-        
-        value = input("Operazioni disponibili: \n 1: Creazione Report per Comune \n 2: Calcolo quota IRAP per Impresa \n 3: Emissione e Registrazione nuovo Modello F24 \n 4: Registrazione Modello F24 precedentemente emesso \n 5: Lista Modelli F24 \n 6: Inserimento Comune \n 7: Inserimento Impresa \n 8: Registrazione Impresa-Comune \n 9: Lista Imprese registrate presso Comune \n 10: Fine operazioni \n")
-        
-        match value:
-            case "1": #Creazione Report per Comune
-                report(arrayComuni)
-
-            case "2": #Calcolo quota IRAP per l'impresa
-                #return IRAP(arrayImprese)
-                IRAP(arrayImprese)
-
-            case "3": #Emissione e Registrazione nuovo Modello F24
-                emissione(arrayImprese,arrayComuni)
-
-            case "4": #Registrazione Modello F24 precedentemente emesso
-                antichiModelliF24(arrayImprese,arrayComuni)
-
-            case "5": #Lista Modelli F24
-                stampaModelli(arrayComuni) 
-
-            case "6": #Inserimento Comune
-                arrayComuni = creaComune(arrayComuni)
-
-            case "7": #Inserimento Impresa
-                arrayImprese = creaImpresa(arrayImprese)
-
-            case "8": #Registrazione Impresa-Comune
-                registrazioneIC(arrayImprese, arrayComuni)
-
-            case "9": #Visualizzare la lista di imprese registrate presso un comune
-                listaRegistrazioni(arrayComuni)
-
-            case "10": #Fine operazioni
-                exit = True
-
-            case _:
-                print("Scegliere un'operazione tra le alternative da 1 a 10.")
-    
 if __name__ == "__main__":
     main()

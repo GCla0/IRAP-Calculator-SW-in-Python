@@ -4,9 +4,32 @@
 from Classes import Impresa # importazione classe impresa
 from datetime import datetime # formato data 
 
-# Legga dal file di testo “imprese.txt” (da creare opportunamente con un editor di testo e contenente
-# almeno i dati di 8 imprese) l’insieme delle imprese e li memorizzi, come oggetti di tipo “Impresa”,
-# all’interno di una lista;
+#######################################################################################################################################################################
+# MAIN 
+#######################################################################################################################################################################
+
+def main ():
+    # lettura file .txt con l'array di imprese
+    arrayImprese = leggiImprese("imprese.txt")
+
+    # creazione e visualizzazione del dizionario
+    dizionario = creaDizionarioPersoneCoinvolte(arrayImprese)
+    print(f"Dizionario:\n{dizionario}\n")
+    
+    # ordinamento e visualizzazione di un nuovo array di imprese in ordine di divisione ATECO
+    arrayImpreseOrdinate = ordinaImprese(arrayImprese)
+    print("Lista delle imprese a sistema ordinate per divisione ATECO:\n")
+    visualizzaImprese(arrayImpreseOrdinate)
+    
+    # salvataggio nuovo array su file .txt
+    scriviImprese(arrayImpreseOrdinate)
+
+
+#######################################################################################################################################################################
+# FUNCTIONS 
+#######################################################################################################################################################################
+
+# leggiImprese(txt) legge il file di testo “imprese.txt” e li registra a sistema come oggetti di tipo Impresa
 
 def leggiImprese(txt):
     arrayImprese = [] #dichiarazione di un array vuoto che ospiterà gli oggetti di tipo impresa
@@ -34,9 +57,9 @@ def leggiImprese(txt):
         print(E)
     return arrayImprese
 
-# A partire dalla lista delle imprese, crei un dizionario contenente per ogni “Codice Fiscale” il totale di
-# persone coinvolte nell’impresa, cioè la somma di “Numero di dipendenti”, “Numero di soci”, e
-# “Numero di amministratori”;
+#######################################################################################################################################################################
+
+# creaDizionarioPersoneCoinvolte(arrayImprese) crea un dizionario contenente per ogni “Codice Fiscale” il totale di persone coinvolte nell’impresa (dipendenti+soci+amministratori)
 
 def creaDizionarioPersoneCoinvolte(arrayImprese):
   DizionarioPersoneCoinvolte = {}
@@ -53,20 +76,25 @@ def creaDizionarioPersoneCoinvolte(arrayImprese):
 
   return DizionarioPersoneCoinvolte
 
-# Ordini la lista delle imprese per “Divisione ATECO” (seguendo l’ordine alfabetico) e a parità di
-# “Divisione ATECO” per “Numero di amministratori” (in ordine decrescente);
+#######################################################################################################################################################################
+
+# ordinaImprese(arrayImprese) ordina la lista delle imprese per “Divisione ATECO” (seguendo l’ordine alfabetico) e a parità di “Divisione ATECO” per “Numero di amministratori” (in ordine decrescente)
 
 def ordinaImprese(arrayImprese):
     arrayImprese.sort(key=lambda x: (x.divisioneAteco, -x.numeroAmministratori)) 
     return arrayImprese
 
-# Visualizzi i dati di tutte le imprese presenti nella lista;
+#######################################################################################################################################################################
+
+# visualizzaImprese(arrayImprese) stampa i dati di tutte le imprese presenti nella lista
 
 def visualizzaImprese(arrayImprese):
    for impresa in arrayImprese:
       print(f"Codice fiscale: {impresa.codiceFiscale}; Denominazione: {impresa.Denominazione}; Ragione sociale: {impresa.ragioneSociale}; Divisione ATECO: {impresa.divisioneAteco}; Numero dipendenti: {impresa.numeroDipendenti}; Numero soci: {impresa.numeroSoci}; Numero amministratori: {impresa.numeroAmministratori}; Data di costituzione: {impresa.dataCostituzione.strftime("%d-%m-%Y")}; Certificazione di qualità: {impresa.certificazioneQualita}; Fatturato: {impresa.Fatturato}\n")
 
-# Salvi sul file “imprese_ordinate.txt” il contenuto finale della lista
+#######################################################################################################################################################################
+
+# scriviImprese(arrayImprese) salva sul file “imprese_ordinate.txt” il contenuto finale della lista
 
 def scriviImprese(arrayImprese):
     with open ("imprese_ordinate.txt", "w") as file:
@@ -74,24 +102,6 @@ def scriviImprese(arrayImprese):
             file.write (f"{impresa.codiceFiscale},{impresa.Denominazione},{impresa.ragioneSociale},{impresa.divisioneAteco},{impresa.numeroDipendenti},{impresa.numeroSoci},{impresa.numeroAmministratori},{impresa.dataCostituzione.strftime("%d-%m-%Y")},{impresa.certificazioneQualita},{impresa.Fatturato}\n") 
 
 #######################################################################################################################################################################
-# MAIN 
-#######################################################################################################################################################################
-
-def main ():
-    # lettura file .txt con l'array di imprese
-    arrayImprese = leggiImprese("imprese.txt")
-
-    # creazione e visualizzazione del dizionario
-    dizionario = creaDizionarioPersoneCoinvolte(arrayImprese)
-    print(f"Dizionario:\n{dizionario}\n")
-    
-    # ordinamento e visualizzazione di un nuovo array di imprese in ordine di divisione ATECO
-    arrayImpreseOrdinate = ordinaImprese(arrayImprese)
-    print("Lista delle imprese a sistema ordinate per divisione ATECO:\n")
-    visualizzaImprese(arrayImpreseOrdinate)
-    
-    # salvataggio nuovo array su file .txt
-    scriviImprese(arrayImpreseOrdinate)
 
 if __name__ == "__main__":
     main()
